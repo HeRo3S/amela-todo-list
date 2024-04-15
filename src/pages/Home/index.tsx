@@ -10,19 +10,25 @@ import {
 import todosMockdata from "./Home.mockdata";
 import DetailsCard from "../../components/DetailsCard";
 import MiniCard from "../../components/MiniCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyledGridHomeContainer } from "./Home.style";
 import { ITodoDetails } from "../../constants/interface";
 import NewCardCreator from "../../components/NewCardCreator";
 import { ListItemMiniCard } from "../../components/MiniCard/MiniCard.style";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SearchIcon from "@mui/icons-material/Search";
+import dayjs from "dayjs";
 
 export default function Home() {
   const [data, setData] = useState(todosMockdata);
   const [searchInputData, setSearchInputData] = useState("");
   const [selectingTodoID, setSelectingTodoID] = useState(0);
   const [isAddingCard, setAddingCard] = useState(false);
+
+  useEffect(() => {
+    const sortedData = [...data].sort(sortTodoByTime);
+    setData(sortedData);
+  }, [data]);
 
   function onClickMiniCard(
     e: React.MouseEvent<HTMLLIElement, MouseEvent>,
@@ -72,19 +78,22 @@ export default function Home() {
     if (selectingTodoID >= newData.length)
       setSelectingTodoID(newData.length - 1);
     setData(newData);
-    console.log(data);
   }
 
   const renderMiniCards = () => {
-    const renderData = data.filter((e) => e.title.includes(searchInputData));
-    return renderData.length > 0 ? (
-      renderData.map((t, i) => (
+    if (data.length <= 0)
+      return (
+        <ListItem>
+          <ListItemText>Nothing is here</ListItemText>
+        </ListItem>
+      );
+
+    return data.map((t, i) =>
+      t.title.includes(searchInputData) ? (
         <MiniCard key={i} info={t} index={i} onClick={onClickMiniCard} />
-      ))
-    ) : (
-      <ListItem>
-        <ListItemText>Nothing is here</ListItemText>
-      </ListItem>
+      ) : (
+        <></>
+      ),
     );
   };
 
@@ -108,18 +117,7 @@ export default function Home() {
             />
           </ListItemMiniCard>
           <Divider />
-          {
-            //     data.length > 0 ? (
-            //   data.map((t, i) => (
-            //     <MiniCard key={i} info={t} index={i} onClick={onClickMiniCard} />
-            //   ))
-            // ) : (
-            //   <ListItem>
-            //     <ListItemText>Nothing is here</ListItemText>
-            //   </ListItem>
-            // )
-            renderMiniCards()
-          }
+          {renderMiniCards()}
         </List>
       </Grid>
       <Grid item xs display="flex">
@@ -138,4 +136,10 @@ export default function Home() {
       </Grid>
     </StyledGridHomeContainer>
   );
+}
+
+function sortTodoByTime(todoA: ITodoDetails, todoB: ITodoDetails) {
+  const dateA = dayjs(todoA.todoAt);
+  const dateB = dayjs(todoB.todoAt);
+  return dateA.isBefore(dateB) ? -1 : 1;
 }
