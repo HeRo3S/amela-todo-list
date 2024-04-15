@@ -21,15 +21,15 @@ import dayjs from "dayjs";
 
 export default function Home() {
   const [data, setData] = useState(
-    JSON.parse(localStorage.getItem("data")) || todosMockdata,
+    localStorage.getItem("data")
+      ? JSON.parse(localStorage.getItem("data"))
+      : todosMockdata,
   );
   const [searchInputData, setSearchInputData] = useState("");
   const [selectingTodoID, setSelectingTodoID] = useState(0);
   const [isAddingCard, setAddingCard] = useState(false);
 
   useEffect(() => {
-    const sortedData = [...data].sort(sortTodoByTime);
-    setData(sortedData);
     localStorage.setItem("data", JSON.stringify(data));
   }, [data]);
 
@@ -61,7 +61,7 @@ export default function Home() {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     edittedData: ITodoDetails,
   ): void {
-    const copyData = [...data, edittedData];
+    const copyData = [...data, edittedData].sort(sortTodoByTime);
     setData(copyData);
   }
 

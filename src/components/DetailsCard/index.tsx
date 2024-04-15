@@ -6,6 +6,7 @@ import {
   StyledGridItemCenterAll,
   StyledGirdItemJustifyRighted,
   StyledGridDetailsCardContainer,
+  StyledTypographyStatus,
 } from "./DetailsCard.style";
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -139,9 +140,9 @@ export default function DetailsCard(props: IProps) {
           </Typography>
         </StyledGirdItemJustifyRighted>
         <StyledGirdItemJustifyRighted item xs={12}>
-          <Typography variant="body1">
+          <StyledTypographyStatus status={details.status} variant="body1">
             {renderStatusText(details.status)}
-          </Typography>
+          </StyledTypographyStatus>
         </StyledGirdItemJustifyRighted>
         <StyledGridItemCenterAll item xs={12}>
           <StyledActionButton onClick={onClickEditButton}>

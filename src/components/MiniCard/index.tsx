@@ -14,7 +14,6 @@ function MiniCard(props: IProps) {
   const { info, index, onClick } = props;
   const { title, todoAt } = info;
 
-  console.log(index, info);
 
   return (
     <ListItemMiniCard onClick={(e) => onClick(e, index)}>
