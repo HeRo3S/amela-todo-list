@@ -10,13 +10,8 @@ import {
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
+import { DEFAULT_DETAILS } from "../../constants/const";
 
-const DEFAULT_DETAILS: ITodoDetails = {
-  title: "Nothing to show",
-  content: "Try add a new card",
-  status: TodoStatus.RESOLVED,
-  todoAt: "2024-12-04",
-};
 interface IProps {
   todo: ITodoDetails | undefined;
   onClickSaveButton: (

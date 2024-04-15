@@ -10,41 +10,34 @@ import {
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
+import { DEFAULT_ADD } from "../../constants/const";
 
 interface IProps {
-  todo: ITodoDetails | undefined;
-  onClickSaveButton: (
+  onClickAddButton: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     edittedData: ITodoDetails,
+  ) => void;
+  onClickCancelAddMode: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => void;
 }
 export default function NewCardCreator(props: IProps) {
   const {
-    todo,
-    onClickSaveButton: onClickSaveButtonParentFn,
-    onClickDeleteButton: onClickDeleteButtonParentFn,
+    onClickAddButton: onClickAddButtonParentFn,
+    onClickCancelAddMode: onClickCancelAddModeParentFn,
   } = props;
 
-  const [details, setDetails] = useState<ITodoDetails>(DEFAULT_DETAILS);
-  const [isEditting, setEditting] = useState(true);
+  const [details, setDetails] = useState<ITodoDetails>(DEFAULT_ADD);
 
-  useEffect(() => {
-    todo ? setDetails(todo) : setDetails(DEFAULT_DETAILS);
-  }, [todo]);
-
-  const onClickEditButton = () => {
-    setEditting(true);
-  };
-  const onClickSaveButton = (
+  const onClickCancelButton = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    onClickSaveButtonParentFn(e, details);
-    setEditting(false);
+    onClickCancelAddModeParentFn(e);
   };
-  const onClickDeleteButton = (
+  const onClickAddButton = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    onClickDeleteButtonParentFn(e);
+    onClickAddButtonParentFn(e, details);
   };
 
   const updateData = (props: {
@@ -109,18 +102,18 @@ export default function NewCardCreator(props: IProps) {
           ></TextField>
         </StyledGirdItemJustifyRighted>
         <StyledGridItemCenterAll item xs={12}>
-          <StyledActionButton onClick={onClickSaveButton}>
-            Save
+          <StyledActionButton onClick={onClickAddButton}>
+            Add
           </StyledActionButton>
-          <StyledActionButton onClick={onClickDeleteButton}>
-            Delete
+          <StyledActionButton onClick={onClickCancelButton}>
+            Cancel
           </StyledActionButton>
         </StyledGridItemCenterAll>
       </StyledGridDetailsCardContainer>
     );
   }
 
-  if (isEditting) return renderIfEditting();
+  return renderIfEditting();
 }
 
 function renderStatusText(status: TodoStatus) {
