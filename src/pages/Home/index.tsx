@@ -20,7 +20,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import dayjs from "dayjs";
 
 export default function Home() {
-  const [data, setData] = useState(todosMockdata);
+  const [data, setData] = useState(
+    JSON.parse(localStorage.getItem("data")) || todosMockdata,
+  );
   const [searchInputData, setSearchInputData] = useState("");
   const [selectingTodoID, setSelectingTodoID] = useState(0);
   const [isAddingCard, setAddingCard] = useState(false);
@@ -28,6 +30,7 @@ export default function Home() {
   useEffect(() => {
     const sortedData = [...data].sort(sortTodoByTime);
     setData(sortedData);
+    localStorage.setItem("data", JSON.stringify(data));
   }, [data]);
 
   function onClickMiniCard(
