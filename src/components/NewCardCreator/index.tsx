@@ -1,4 +1,4 @@
-import { Grid, TextField, Typography } from "@mui/material";
+import { Grid, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { ITodoDetails } from "../../constants/interface";
 import { TodoStatus } from "../../constants/enum";
 import {
@@ -44,7 +44,7 @@ export default function NewCardCreator(props: IProps) {
     title?: string;
     content?: string;
     todoAt?: string;
-    string?: string;
+    status?: TodoStatus;
   }) => {
     const copydata = { ...details, ...props };
     setDetails(copydata);
@@ -54,6 +54,10 @@ export default function NewCardCreator(props: IProps) {
   ) => {
     const { name, value } = event.target;
     updateData({ [name]: value });
+  };
+  const onChangeSelectStatus = (event: SelectChangeEvent) => {
+    event.target.value !== undefined &&
+      updateData({ status: +event.target.value });
   };
 
   const onChangeDatePicker = (newValue: Dayjs | null) => {
@@ -93,13 +97,15 @@ export default function NewCardCreator(props: IProps) {
           />
         </StyledGirdItemJustifyRighted>
         <StyledGirdItemJustifyRighted item xs={12}>
-          <TextField
-            variant="standard"
-            fullWidth
-            name="status"
-            defaultValue={details.status}
-            onChange={(e) => onChangeTextField(e)}
-          ></TextField>
+          <Select
+            value={details.status}
+            label="Status"
+            onChange={onChangeSelectStatus}
+          >
+            <MenuItem value={TodoStatus.OPEN}>Open</MenuItem>
+            <MenuItem value={TodoStatus.IN_PROGRESS}>In progress</MenuItem>
+            <MenuItem value={TodoStatus.RESOLVED}>Resolved</MenuItem>
+          </Select>
         </StyledGirdItemJustifyRighted>
         <StyledGridItemCenterAll item xs={12}>
           <StyledActionButton onClick={onClickAddButton}>
